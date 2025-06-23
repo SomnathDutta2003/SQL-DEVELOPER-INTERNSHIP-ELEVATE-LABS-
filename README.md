@@ -1,5 +1,7 @@
 TASK 1: Database Setup and Schema Design – E-Commerce Database
+
 👤 Author: Somnath Dutta
+
 📌 Objective
 The objective of this task is to design the structural blueprint of a relational database tailored for an E-Commerce system. The focus is on identifying core entities, their attributes, and relationships—laying the groundwork for an efficient, normalized database schema that supports business operations like product listings, user management, orders, and payments.
 
