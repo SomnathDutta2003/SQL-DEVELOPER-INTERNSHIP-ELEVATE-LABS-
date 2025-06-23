@@ -1,0 +1,137 @@
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 9.0.1 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database ecommercedb;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use ecommercedb;
+Database changed
+mysql> create table customers (
+    -> customerid int auto_increment primary key,
+    -> name varchar (100) not null,
+    -> email varchar(100) unique,
+    -> phone varchar(15),
+    -> address text
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> desc customers;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| customerid | int          | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(100) | NO   |     | NULL    |                |
+| email      | varchar(100) | YES  | UNI | NULL    |                |
+| phone      | varchar(15)  | YES  |     | NULL    |                |
+| address    | text         | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.01 sec)
+
+mysql> create table products (
+    -> productid int auto_increment primary key,
+    -> productname varchar(100) not null,
+    -> description text,
+    -> price decimal(10,2) not null,
+    -> stock int default 0
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc products;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| productid   | int           | NO   | PRI | NULL    | auto_increment |
+| productname | varchar(100)  | NO   |     | NULL    |                |
+| description | text          | YES  |     | NULL    |                |
+| price       | decimal(10,2) | NO   |     | NULL    |                |
+| stock       | int           | YES  |     | 0       |                |
++-------------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> create table orders (
+    -> orderid int auto_increment primary key,
+    -> customerid int,
+    -> orderdate datetime default current_timestamp,
+    -> totalamount decimal(10,2),
+    -> foreign key (customerid) references customers(customerid)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> desc orders;
++-------------+---------------+------+-----+-------------------+-------------------+
+| Field       | Type          | Null | Key | Default           | Extra             |
++-------------+---------------+------+-----+-------------------+-------------------+
+| orderid     | int           | NO   | PRI | NULL              | auto_increment    |
+| customerid  | int           | YES  | MUL | NULL              |                   |
+| orderdate   | datetime      | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| totalamount | decimal(10,2) | YES  |     | NULL              |                   |
++-------------+---------------+------+-----+-------------------+-------------------+
+4 rows in set (0.00 sec)
+
+mysql> create table orderitems (
+    -> orderitemid int auto_increment primary key,
+    -> orderid int,
+    -> productid int,
+    -> quantity int,
+    -> price decimal(10,2),
+    -> foreign key (orderid) references orders(orderid),
+    -> foreign key (productid) references products(productid)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> desc orderitems;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| orderitemid | int           | NO   | PRI | NULL    | auto_increment |
+| orderid     | int           | YES  | MUL | NULL    |                |
+| productid   | int           | YES  | MUL | NULL    |                |
+| quantity    | int           | YES  |     | NULL    |                |
+| price       | decimal(10,2) | YES  |     | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+5 rows in set (0.05 sec)
+
+mysql> create table categories (
+    -> categoryid int auto_increment primary key,
+    -> categoryname varchar(100) not null
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc categories;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| categoryid   | int          | NO   | PRI | NULL    | auto_increment |
+| categoryname | varchar(100) | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> create table productcategory (
+    -> productid int,
+    -> categoryid int,
+    -> primary key (productid, categoryid),
+    -> foreign key (productid) references products(productid),
+    -> foreign key (categoryid) references categories(categoryid)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> desc productcategory;
++------------+------+------+-----+---------+-------+
+| Field      | Type | Null | Key | Default | Extra |
++------------+------+------+-----+---------+-------+
+| productid  | int  | NO   | PRI | NULL    |       |
+| categoryid | int  | NO   | PRI | NULL    |       |
++------------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql>
