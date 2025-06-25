@@ -1,0 +1,149 @@
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 9.0.1 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use somnath;
+Database changed
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ecommercedb        |
+| information_schema |
+| librarydb          |
+| mysql              |
+| performance_schema |
+| somnath            |
+| sys                |
+| ums_somnath        |
++--------------------+
+8 rows in set (0.04 sec)
+
+mysql> create table customers (
+    -> customerid int primary key auto_increment,
+    -> name varchar(100),
+    -> email varchar(100),
+    -> age int,
+    -> city varchar(50)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc customers;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| customerid | int          | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(100) | YES  |     | NULL    |                |
+| email      | varchar(100) | YES  |     | NULL    |                |
+| age        | int          | YES  |     | NULL    |                |
+| city       | varchar(50)  | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.02 sec)
+
+mysql> insert into customers (name,email,age,city)
+    -> values ('alice johnson','alice@example.com',30,'new york');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> desc customers;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| customerid | int          | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(100) | YES  |     | NULL    |                |
+| email      | varchar(100) | YES  |     | NULL    |                |
+| age        | int          | YES  |     | NULL    |                |
+| city       | varchar(50)  | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into customers (name,email,age,city)
+    -> values ('bob smith',null,25,null);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> desc customers;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| customerid | int          | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(100) | YES  |     | NULL    |                |
+| email      | varchar(100) | YES  |     | NULL    |                |
+| age        | int          | YES  |     | NULL    |                |
+| city       | varchar(50)  | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> update customers
+    -> set city ='los angles'
+    -> where customerid =1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> show table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> desc update customers;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> desc customers;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| customerid | int          | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(100) | YES  |     | NULL    |                |
+| email      | varchar(100) | YES  |     | NULL    |                |
+| age        | int          | YES  |     | NULL    |                |
+| city       | varchar(50)  | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> update customers
+    -> set email =null
+    -> where name = 'Alice Johnson';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update customers table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table' at line 1
+mysql> delete from customers
+    -> where customerid = 2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> delete from customers;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from customers
+    -> where email is null;
+Empty set (0.00 sec)
+
+mysql> select name,coalesce(email,'no email provided') as emailstatus
+    -> from customers;
+Empty set (0.01 sec)
+
+mysql> create table customers (
+    -> customerid int primary key auto_increment,
+    -> name varchar(100) not null,
+    -> email varchar(100),
+    -> age int check (age > 0),
+    -> city varchar(50)
+    -> );
+ERROR 1050 (42S01): Table 'customers' already exists
+mysql> desc customers;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| customerid | int          | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(100) | YES  |     | NULL    |                |
+| email      | varchar(100) | YES  |     | NULL    |                |
+| age        | int          | YES  |     | NULL    |                |
+| city       | varchar(50)  | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql>
