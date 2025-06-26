@@ -1,0 +1,114 @@
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 9.0.1 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use somnath;
+Database changed
+mysql> create table deliveryboy (
+    -> boyid int primary key,
+    -> firstname varchar(50),
+    -> lastname varchar(50),
+    -> age int,
+    -> gender varchar(10),
+    -> contactnumber varchar(15),
+    -> city varchar(50),
+    -> vechicletype varchar(30),
+    -> deliverycount int,
+    -> rating decimal(3,2)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> INSERT INTO DeliveryBoy VALUES
+    -> (101, 'Raj', 'Kumar', 25, 'Male', '9876543210', 'Delhi', 'Bike', 150, 4.6),
+    -> (102, 'Amit', 'Yadav', 28, 'Male', '9876501234', 'Mumbai', 'Scooter', 200, 4.8),
+    -> (103, 'Pooja', 'Sharma', 23, 'Female', '9876598765', 'Delhi', 'Bicycle', 80, 4.2),
+    -> (104, 'Sunil', 'Verma', 30, 'Male', '9876523456', 'Kolkata', 'Bike', 250, 4.9);
+Query OK, 4 rows affected (0.02 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from deliveryboy;
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+| boyid | firstname | lastname | age  | gender | contactnumber | city    | vechicletype | deliverycount | rating |
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+|   101 | Raj       | Kumar    |   25 | Male   | 9876543210    | Delhi   | Bike         |           150 |   4.60 |
+|   102 | Amit      | Yadav    |   28 | Male   | 9876501234    | Mumbai  | Scooter      |           200 |   4.80 |
+|   103 | Pooja     | Sharma   |   23 | Female | 9876598765    | Delhi   | Bicycle      |            80 |   4.20 |
+|   104 | Sunil     | Verma    |   30 | Male   | 9876523456    | Kolkata | Bike         |           250 |   4.90 |
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+4 rows in set (0.01 sec)
+
+mysql> select firstname,lastname,city from deliveryboy;
++-----------+----------+---------+
+| firstname | lastname | city    |
++-----------+----------+---------+
+| Raj       | Kumar    | Delhi   |
+| Amit      | Yadav    | Mumbai  |
+| Pooja     | Sharma   | Delhi   |
+| Sunil     | Verma    | Kolkata |
++-----------+----------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from deliveryboy
+    -> where city ='delhi';
++-------+-----------+----------+------+--------+---------------+-------+--------------+---------------+--------+
+| boyid | firstname | lastname | age  | gender | contactnumber | city  | vechicletype | deliverycount | rating |
++-------+-----------+----------+------+--------+---------------+-------+--------------+---------------+--------+
+|   101 | Raj       | Kumar    |   25 | Male   | 9876543210    | Delhi | Bike         |           150 |   4.60 |
+|   103 | Pooja     | Sharma   |   23 | Female | 9876598765    | Delhi | Bicycle      |            80 |   4.20 |
++-------+-----------+----------+------+--------+---------------+-------+--------------+---------------+--------+
+2 rows in set (0.01 sec)
+
+mysql> select *from deliveryboy
+    -> where rating > 4.5;
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+| boyid | firstname | lastname | age  | gender | contactnumber | city    | vechicletype | deliverycount | rating |
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+|   101 | Raj       | Kumar    |   25 | Male   | 9876543210    | Delhi   | Bike         |           150 |   4.60 |
+|   102 | Amit      | Yadav    |   28 | Male   | 9876501234    | Mumbai  | Scooter      |           200 |   4.80 |
+|   104 | Sunil     | Verma    |   30 | Male   | 9876523456    | Kolkata | Bike         |           250 |   4.90 |
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+3 rows in set (0.01 sec)
+
+mysql> select distinct city from deliveryboy;
++---------+
+| city    |
++---------+
+| Delhi   |
+| Mumbai  |
+| Kolkata |
++---------+
+3 rows in set (0.01 sec)
+
+mysql> select * from deliveryboy
+    -> order by deliverycount desc;
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+| boyid | firstname | lastname | age  | gender | contactnumber | city    | vechicletype | deliverycount | rating |
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+|   104 | Sunil     | Verma    |   30 | Male   | 9876523456    | Kolkata | Bike         |           250 |   4.90 |
+|   102 | Amit      | Yadav    |   28 | Male   | 9876501234    | Mumbai  | Scooter      |           200 |   4.80 |
+|   101 | Raj       | Kumar    |   25 | Male   | 9876543210    | Delhi   | Bike         |           150 |   4.60 |
+|   103 | Pooja     | Sharma   |   23 | Female | 9876598765    | Delhi   | Bicycle      |            80 |   4.20 |
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+4 rows in set (0.01 sec)
+
+mysql> select * from deliveryboy
+    -> order by rating desc
+    -> limit 2;
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+| boyid | firstname | lastname | age  | gender | contactnumber | city    | vechicletype | deliverycount | rating |
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+|   104 | Sunil     | Verma    |   30 | Male   | 9876523456    | Kolkata | Bike         |           250 |   4.90 |
+|   102 | Amit      | Yadav    |   28 | Male   | 9876501234    | Mumbai  | Scooter      |           200 |   4.80 |
++-------+-----------+----------+------+--------+---------------+---------+--------------+---------------+--------+
+2 rows in set (0.00 sec)
+
+mysql>
