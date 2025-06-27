@@ -1,0 +1,145 @@
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 9.0.1 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use somnath;
+Database changed
+mysql> CREATE TABLE medical_staff (
+    ->     staff_id INT PRIMARY KEY,
+    ->     name VARCHAR(100),
+    ->     department VARCHAR(50),
+    ->     role VARCHAR(50),
+    ->     salary INT,
+    ->     experience_years INT
+    -> );
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> INSERT INTO medical_staff (staff_id, name, department, role, salary, experience_years)
+    -> VALUES
+    -> (1, 'Dr. Sharma', 'Cardiology', 'Doctor', 120000, 15),
+    -> (2, 'Dr. Patel', 'Neurology', 'Doctor', 130000, 12),
+    -> (3, 'Nurse Rani', 'Cardiology', 'Nurse', 60000, 10),
+    -> (4, 'Dr. Khan', 'Orthopedics', 'Doctor', 110000, 9),
+    -> (5, 'Nurse Sinha', 'Neurology', 'Nurse', 58000, 7),
+    -> (6, 'Dr. Mehta', 'Cardiology', 'Doctor', 125000, 18);
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT department, COUNT(*) AS staff_count
+    -> FROM medical_staff
+    -> GROUP BY department;
++-------------+-------------+
+| department  | staff_count |
++-------------+-------------+
+| Cardiology  |           3 |
+| Neurology   |           2 |
+| Orthopedics |           1 |
++-------------+-------------+
+3 rows in set (0.02 sec)
+
+mysql> SELECT role, AVG(salary) AS avg_salary
+    -> FROM medical_staff
+    -> GROUP BY role;
++--------+-------------+
+| role   | avg_salary  |
++--------+-------------+
+| Doctor | 121250.0000 |
+| Nurse  |  59000.0000 |
++--------+-------------+
+2 rows in set (0.09 sec)
+
+mysql> SELECT department, MAX(experience_years) AS max_experience
+    -> FROM medical_staff
+    -> GROUP BY department;
++-------------+----------------+
+| department  | max_experience |
++-------------+----------------+
+| Cardiology  |             18 |
+| Neurology   |             12 |
+| Orthopedics |              9 |
++-------------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT department, SUM(salary) AS total_salary
+    -> FROM medical_staff
+    -> GROUP BY department;
++-------------+--------------+
+| department  | total_salary |
++-------------+--------------+
+| Cardiology  |       305000 |
+| Neurology   |       188000 |
+| Orthopedics |       110000 |
++-------------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT department, COUNT(*) AS staff_count
+    -> FROM medical_staff
+    -> GROUP BY department
+    -> HAVING COUNT(*) > 2;
++------------+-------------+
+| department | staff_count |
++------------+-------------+
+| Cardiology |           3 |
++------------+-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT column_name, AGGREGATE_FUNCTION(column_name)
+    -> FROM table_name
+    -> GROUP BY column_name;
+ERROR 1146 (42S02): Table 'somnath.table_name' doesn't exist
+mysql> SELECT department, COUNT(*) AS total_staff
+    -> FROM medical_staff
+    -> GROUP BY department;
++-------------+-------------+
+| department  | total_staff |
++-------------+-------------+
+| Cardiology  |           3 |
+| Neurology   |           2 |
+| Orthopedics |           1 |
++-------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT role, AVG(salary) AS average_salary
+    -> FROM medical_staff
+    -> GROUP BY role;
++--------+----------------+
+| role   | average_salary |
++--------+----------------+
+| Doctor |    121250.0000 |
+| Nurse  |     59000.0000 |
++--------+----------------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT department, SUM(experience_years) AS total_experience
+    -> FROM medical_staff
+    -> GROUP BY department;
++-------------+------------------+
+| department  | total_experience |
++-------------+------------------+
+| Cardiology  |               43 |
+| Neurology   |               19 |
+| Orthopedics |                9 |
++-------------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT department, COUNT(*) AS staff_count
+    -> FROM medical_staff
+    -> GROUP BY department
+    -> HAVING COUNT(*) > 2;
++------------+-------------+
+| department | staff_count |
++------------+-------------+
+| Cardiology |           3 |
++------------+-------------+
+1 row in set (0.00 sec)
+
+mysql>
