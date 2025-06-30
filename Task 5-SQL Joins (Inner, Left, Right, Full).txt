@@ -1,0 +1,109 @@
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 9.0.1 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use somnath;
+Database changed
+mysql> CREATE TABLE cricketer (
+    ->     cricketer_id INT PRIMARY KEY,
+    ->     name VARCHAR(50),
+    ->     team_id INT
+    -> );
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> CREATE TABLE team (
+    ->     team_id INT PRIMARY KEY,
+    ->     team_name VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO cricketer (cricketer_id, name, team_id) VALUES
+    -> (1, 'Virat Kohli', 1),
+    -> (2, 'Joe Root', 2),
+    -> (3, 'Kane Williamson', 3),
+    -> (4, 'Steve Smith', NULL),
+    -> (5, 'Babar Azam', 4);
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO team (team_id, team_name) VALUES
+    -> (1, 'India'),
+    -> (2, 'England'),
+    -> (3, 'New Zealand'),
+    -> (4, 'Pakistan'),
+    -> (5, 'Australia');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT c.name, t.team_name
+    -> FROM cricketer c
+    -> INNER JOIN team t ON c.team_id = t.team_id;
++-----------------+-------------+
+| name            | team_name   |
++-----------------+-------------+
+| Virat Kohli     | India       |
+| Joe Root        | England     |
+| Kane Williamson | New Zealand |
+| Babar Azam      | Pakistan    |
++-----------------+-------------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT c.name, t.team_name
+    -> FROM cricketer c
+    -> LEFT JOIN team t ON c.team_id = t.team_id;
++-----------------+-------------+
+| name            | team_name   |
++-----------------+-------------+
+| Virat Kohli     | India       |
+| Joe Root        | England     |
+| Kane Williamson | New Zealand |
+| Steve Smith     | NULL        |
+| Babar Azam      | Pakistan    |
++-----------------+-------------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT c.name, t.team_name
+    -> FROM cricketer c
+    -> RIGHT JOIN team t ON c.team_id = t.team_id;
++-----------------+-------------+
+| name            | team_name   |
++-----------------+-------------+
+| Virat Kohli     | India       |
+| Joe Root        | England     |
+| Kane Williamson | New Zealand |
+| Babar Azam      | Pakistan    |
+| NULL            | Australia   |
++-----------------+-------------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT c.name, t.team_name
+    -> FROM cricketer c
+    -> LEFT JOIN team t ON c.team_id = t.team_id
+    ->
+    -> UNION
+    ->
+    -> SELECT c.name, t.team_name
+    -> FROM cricketer c
+    -> RIGHT JOIN team t ON c.team_id = t.team_id;
++-----------------+-------------+
+| name            | team_name   |
++-----------------+-------------+
+| Virat Kohli     | India       |
+| Joe Root        | England     |
+| Kane Williamson | New Zealand |
+| Steve Smith     | NULL        |
+| Babar Azam      | Pakistan    |
+| NULL            | Australia   |
++-----------------+-------------+
+6 rows in set (0.01 sec)
+
+mysql>
