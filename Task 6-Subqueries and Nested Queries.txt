@@ -1,0 +1,110 @@
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 9.0.1 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> usesomnath;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'usesomnath' at line 1
+mysql> use somnath;
+Database changed
+mysql> CREATE TABLE singers (
+    ->     singer_id INT PRIMARY KEY,
+    ->     name VARCHAR(50),
+    ->     country VARCHAR(50),
+    ->     total_albums INT,
+    ->     total_awards INT
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> INSERT INTO singers (singer_id, name, country, total_albums, total_awards) VALUES
+    -> (1, 'Arijit Singh', 'India', 20, 15),
+    -> (2, 'Taylor Swift', 'USA', 12, 45),
+    -> (3, 'Ed Sheeran', 'UK', 8, 30),
+    -> (4, 'Shreya Ghoshal', 'India', 25, 20),
+    -> (5, 'Adele', 'UK', 5, 35),
+    -> (6, 'The Weeknd', 'Canada', 10, 25);
+Query OK, 6 rows affected (0.02 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT name,
+    ->        total_awards,
+    ->        total_awards - (SELECT AVG(total_awards) FROM singers) AS award_diff_from_avg
+    -> FROM singers;
++----------------+--------------+---------------------+
+| name           | total_awards | award_diff_from_avg |
++----------------+--------------+---------------------+
+| Arijit Singh   |           15 |            -13.3333 |
+| Taylor Swift   |           45 |             16.6667 |
+| Ed Sheeran     |           30 |              1.6667 |
+| Shreya Ghoshal |           20 |             -8.3333 |
+| Adele          |           35 |              6.6667 |
+| The Weeknd     |           25 |             -3.3333 |
++----------------+--------------+---------------------+
+6 rows in set (0.01 sec)
+
+mysql> SELECT name, total_albums
+    -> FROM singers
+    -> WHERE total_albums > (SELECT AVG(total_albums) FROM singers);
++----------------+--------------+
+| name           | total_albums |
++----------------+--------------+
+| Arijit Singh   |           20 |
+| Shreya Ghoshal |           25 |
++----------------+--------------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT s.name, s.total_awards, avg_data.avg_awards
+    -> FROM singers s,
+    ->      (SELECT AVG(total_awards) AS avg_awards FROM singers) AS avg_data
+    -> WHERE s.total_awards > avg_data.avg_awards;
++--------------+--------------+------------+
+| name         | total_awards | avg_awards |
++--------------+--------------+------------+
+| Taylor Swift |           45 |    28.3333 |
+| Ed Sheeran   |           30 |    28.3333 |
+| Adele        |           35 |    28.3333 |
++--------------+--------------+------------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT name, country, total_albums
+    -> FROM singers s1
+    -> WHERE total_albums = (
+    ->     SELECT MAX(total_albums)
+    ->     FROM singers s2
+    ->     WHERE s1.country = s2.country
+    -> );
++----------------+---------+--------------+
+| name           | country | total_albums |
++----------------+---------+--------------+
+| Taylor Swift   | USA     |           12 |
+| Ed Sheeran     | UK      |            8 |
+| Shreya Ghoshal | India   |           25 |
+| The Weeknd     | Canada  |           10 |
++----------------+---------+--------------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT name, country
+    -> FROM singers
+    -> WHERE country IN (
+    ->     SELECT country
+    ->     FROM singers
+    ->     WHERE total_awards > 30
+    -> );
++--------------+---------+
+| name         | country |
++--------------+---------+
+| Taylor Swift | USA     |
+| Ed Sheeran   | UK      |
+| Adele        | UK      |
++--------------+---------+
+3 rows in set (0.01 sec)
+
+mysql>
