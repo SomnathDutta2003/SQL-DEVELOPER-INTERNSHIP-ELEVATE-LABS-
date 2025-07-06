@@ -1,0 +1,93 @@
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 14
+Server version: 9.0.1 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use somnath;
+Database changed
+mysql> select* from footballer;
++----------+-------------------+-------------+-----------------+------------+-------+---------+------+
+| PlayerID | Name              | Country     | Club            | Position   | Goals | Assists | Age  |
++----------+-------------------+-------------+-----------------+------------+-------+---------+------+
+|        1 | Lionel Messi      | Argentina   | Inter Miami     | Forward    |   820 |     350 |   37 |
+|        2 | Cristiano Ronaldo | Portugal    | Al Nassr        | Forward    |   850 |     250 |   39 |
+|        3 | Kevin De Bruyne   | Belgium     | Manchester City | Midfielder |   100 |     230 |   33 |
+|        4 | Kylian Mbappe     | France      | Real Madrid     | Forward    |   290 |     120 |   26 |
+|        5 | Virgil van Dijk   | Netherlands | Liverpool       | Defender   |    35 |      15 |   33 |
++----------+-------------------+-------------+-----------------+------------+-------+---------+------+
+5 rows in set (0.04 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE UpdateGoals (
+    ->     IN p_PlayerID INT,
+    ->     IN p_Goals INT
+    -> )
+    -> BEGIN
+    ->     UPDATE Footballer
+    ->     SET Goals = Goals + p_Goals
+    ->     WHERE PlayerID = p_PlayerID;
+    -> END$$
+Query OK, 0 rows affected (0.10 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> CALL UpdateGoals(1, 2);  -- Adds 2 goals to player with ID 1
+Query OK, 1 row affected (0.02 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE FUNCTION TotalContribution (p_PlayerID INT)
+    -> RETURNS INT
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE total INT;
+    ->     SELECT Goals + Assists INTO total
+    ->     FROM Footballer
+    ->     WHERE PlayerID = p_PlayerID;
+    ->     RETURN total;
+    -> END$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> SELECT TotalContribution(1) AS Contribution;
++--------------+
+| Contribution |
++--------------+
+|         1172 |
++--------------+
+1 row in set (0.01 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE GetTopScorer()
+    -> BEGIN
+    ->     SELECT Name, Goals
+    ->     FROM Footballer
+    ->     ORDER BY Goals DESC
+    ->     LIMIT 1;
+    -> END$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> CALL GetTopScorer();
++-------------------+-------+
+| Name              | Goals |
++-------------------+-------+
+| Cristiano Ronaldo |   850 |
++-------------------+-------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
